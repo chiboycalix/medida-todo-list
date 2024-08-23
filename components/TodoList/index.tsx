@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -31,7 +30,6 @@ const TodoList = () => {
   const { user, loading } = useAuth();
   const logout = useLogout();
 
-  console.log({ user })
   useEffect(() => {
     if (loading) return;
 

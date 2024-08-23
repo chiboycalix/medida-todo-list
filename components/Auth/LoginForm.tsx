@@ -80,7 +80,8 @@ const Login: React.FC = () => {
   return (
     <div className='mx-auto'>
       <div className='mb-6'>
-        <h2 className='text-2xl mb-2'>Welcome back</h2>
+        <h2 className='text-2xl mb-2'>Welcome back <span className="text-2xl animate-wave">👋</span>
+        </h2>
         <p className='text-sm text-opacity-80 leading-6'>Today is a new day.It&apos;s your day. You shape it.
           Sign in to start managing your projects.</p>
       </div>
