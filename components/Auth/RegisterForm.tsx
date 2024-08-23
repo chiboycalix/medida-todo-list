@@ -15,6 +15,7 @@ import { initialRegisterState, registerReducer } from '@/reducers/registerReduce
 import { useToast } from '@/components/ToastContainer';
 import { useRouter } from 'next/navigation';
 import { getDatabase, ref, set } from 'firebase/database';
+import { setCookie } from 'cookies-next';
 
 const SignUp: React.FC = () => {
   const [state, dispatch] = useReducer(registerReducer, initialRegisterState);
@@ -48,16 +49,23 @@ const SignUp: React.FC = () => {
       }
 
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, { displayName: name });
+      const user = userCredential.user
+      await updateProfile(user, { displayName: name });
 
       const db = getDatabase();
-      await set(ref(db, 'users/' + userCredential.user.uid), {
+      await set(ref(db, 'users/' + user.uid), {
         fullName: name,
         email: email
       });
+
+      setCookie('authToken', await user.getIdToken(), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+
+      router.push("/")
       addToast("Sign up was successful", 'success');
       dispatch({ type: 'RESET_FORM' });
-      router.push("/")
     } catch (error: any) {
       if (error.message === "Firebase: Error (auth/email-already-in-use).") {
         addToast("Email already in use", 'error');
@@ -82,7 +90,10 @@ const SignUp: React.FC = () => {
           email: email
         });
       }
-
+      setCookie('authToken', await result.user.getIdToken(), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
       addToast("Sign up was successful", 'success');
       router.push("/")
     } catch (error: any) {
@@ -90,6 +101,7 @@ const SignUp: React.FC = () => {
       addToast(error.message, 'error');
     }
   };
+
   const handleFacebookSignIn = async () => {
 
   };

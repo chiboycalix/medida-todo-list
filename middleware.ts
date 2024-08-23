@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const authToken = request.cookies.get("authToken")?.value;
-  const publicRoutes = ["/auth/login", "/auth/signup"];
+  const publicRoutes = ["/auth/login", "/auth/register"];
   const isPublicRoute = publicRoutes.includes(request.nextUrl.pathname);
   if (!authToken && !isPublicRoute) {
     return NextResponse.redirect(new URL("/auth/login", request.url));

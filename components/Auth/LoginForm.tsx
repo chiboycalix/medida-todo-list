@@ -40,7 +40,7 @@ const Login: React.FC = () => {
       const user = userCredential.user;
       addToast("Sign in was successful", 'success');
       setCookie('authToken', await user.getIdToken(), {
-        maxAge: 30 * 24 * 60 * 60, // 30 days
+        maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
       router.push("/")
@@ -61,8 +61,13 @@ const Login: React.FC = () => {
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const userCredential = await signInWithPopup(auth, provider);
+      const user = userCredential.user;
       addToast("Sign in was successful", 'success');
+      setCookie('authToken', await user.getIdToken(), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
       router.push("/")
     } catch (error: any) {
       console.error('Error signing in with Google:', error);
@@ -113,11 +118,11 @@ const Login: React.FC = () => {
       <div>
         <Button onClick={handleGoogleSignIn} variant="outline" className="w-full mb-4 border-none bg-[#f2f8fa]" size="lg">
           <Image src={GoogleIcon} alt='GoogleIcon' className='mr-2' />
-          Sign up with Google
+          Sign in with Google
         </Button>
         <Button onClick={handleFacebookSignIn} variant="outline" className="w-full border-none bg-[#f2f8fa]" size="lg">
           <Image src={FacebookIcon} alt='FacebookIcon' className='mr-2' />
-          Sign up with Facebook
+          Sign in with Facebook
         </Button>
       </div>
       <p className="text-sm text-center w-full mt-10">
