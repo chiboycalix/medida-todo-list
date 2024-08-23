@@ -1,5 +1,5 @@
 
-import React, { useEffect, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import Link from 'next/link';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
@@ -10,28 +10,17 @@ import { Label } from '@/components/ui/label';
 import GoogleIcon from "@/assets/Images/googleIcon.svg";
 import FacebookIcon from "@/assets/Images/facebookIcon.svg"
 import Image from 'next/image';
+import Loader from '@/components/Loader';
 import { initialRegisterState, registerReducer } from '@/reducers/registerReducer';
-import Loader from '../Loader';
-import { useToast } from '../ToastContainer';
+import { useToast } from '@/components/ToastContainer';
 import { useRouter } from 'next/navigation';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { getDatabase, ref, set } from 'firebase/database';
 
 const SignUp: React.FC = () => {
   const [state, dispatch] = useReducer(registerReducer, initialRegisterState);
   const { name, email, password, confirmPassword, isCreatingTodo } = state;
   const { addToast } = useToast();
-  const [user] = useAuthState(auth);
   const router = useRouter();
-
-
-  useEffect(() => {
-    if (!user) {
-      router.push("/auth/register")
-    } else {
-      router.push("/")
-    }
-  }, [user, router])
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();

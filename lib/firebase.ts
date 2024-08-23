@@ -16,25 +16,3 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 export { app, db, auth };
-
-// // Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
-
-// // Your web app's Firebase configuration
-// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDeubBDmpxZvaD_-GJDuUT0HKPwC_FGezA",
-//   authDomain: "medida-74570.firebaseapp.com",
-//   projectId: "medida-74570",
-//   storageBucket: "medida-74570.appspot.com",
-//   messagingSenderId: "877888807557",
-//   appId: "1:877888807557:web:a79a4af7d3d0b8f0b7bfec",
-//   measurementId: "G-CJGG2E0KZP"
-// };
-
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);

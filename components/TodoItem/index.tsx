@@ -23,7 +23,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   return (
     <div className='flex items-center justify-between shadow-[0_0_9.36px_0_#E5E5E5] p-4 rounded-2xl mb-6'>
       <div>
-        <p>{todo.title}</p>
+        <p className='mb-1'>{todo.title}</p>
         <Badge
           className={cn('py-1 rounded-lg capitalize',
             todo.priority === "high" && "bg-[#FCEEF5] text-[#571032]",

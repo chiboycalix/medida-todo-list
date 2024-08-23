@@ -17,7 +17,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   onConfirm,
   todoTitle,
 }) => {
-  const [state, dispatch] = useReducer(todoReducer, initialTodoState)
+  const [state] = useReducer(todoReducer, initialTodoState)
   const { isDeletingTodo } = state;
 
   return (

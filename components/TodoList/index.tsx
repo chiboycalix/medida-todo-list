@@ -19,10 +19,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Todo } from '@/types/Todo';
 import AddTodo from '../AddTodo';
 import TodoItem from '@/components/TodoItem';
-import { signOut } from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import { useRouter } from 'next/navigation';
-import { useToast } from '../ToastContainer';
+import Loader from '../Loader';
+import { useLogout } from '@/hooks/useLogout';
 
 type FilterOption = 'all' | 'today' | 'week' | 'month';
 
@@ -31,8 +29,7 @@ const TodoList = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterOption>('all');
   const { user, loading } = useAuth();
-  const router = useRouter();
-  const { addToast } = useToast();
+  const logout = useLogout();
 
   useEffect(() => {
     if (loading) return;
@@ -41,7 +38,6 @@ const TodoList = () => {
       setTodos([]);
       return;
     }
-
     const q = query(
       collection(db, 'todos'),
       where('userId', '==', user.uid),
@@ -57,7 +53,6 @@ const TodoList = () => {
       });
       setTodos(todoList);
     });
-
     return () => unsubscribe();
   }, [user, loading]);
 
@@ -100,28 +95,16 @@ const TodoList = () => {
   const groupedTodos = groupTodosByDay(filteredTodos);
 
   if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user) {
-    return <div>Please log in to view your todos.</div>;
-  }
-
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth)
-      router.push("/auth/login")
-      addToast("Sign out was successful", 'success');
-    } catch (error) {
-
-    }
+    return <div className='flex items-center justify-center h-screen'>
+      <Loader size='large' color='text-black' />
+    </div>;
   }
 
   return (
-    <div className='relative bg-white w-[40rem] mx-auto rounded-2xl p-8 pb-[7rem] border shadow-sm'>
+    <div className='relative bg-white mx-auto rounded-2xl p-8 border shadow-sm lg:w-[40%] ipad:w-[60%] sm:w-[70%] w-[100%]'>
       <div className="w-full mb-4 flex items-center justify-between">
         <h2 className="text-2xl font-black p-2">Todo List</h2>
-        <Button onClick={() => handleSignOut()} size="sm">Sign Out</Button>
+        <Button onClick={logout} size="sm">Sign Out</Button>
       </div>
       <div className="mb-4 p-2">
         <Select value={filter} onValueChange={(value: FilterOption) => setFilter(value)}>
@@ -139,10 +122,12 @@ const TodoList = () => {
 
       <div className='mt-5'>
         <ScrollArea className="h-[500px]" scrollHideDelay={0}>
-          {filteredTodos.length === 0 && "No todo available"}
+          {filteredTodos.length === 0 && <div className='flex items-center justify-center h-screen'>
+            <Loader size='large' color='text-black' />
+          </div>}
           {Object.entries(groupedTodos).map(([day, dayTodos]) => (
             <div key={day} className="rounded mb-0 p-2">
-              <h2 className="text-xl font-bold mb-2 text-[#E53170]">{day}</h2>
+              <h2 className="md:text-xl text-md font-bold mb-2 text-[#E53170]">{day}</h2>
               {dayTodos.map((todo, idx) => (
                 <TodoItem key={idx} todo={todo} />
               ))}
@@ -151,25 +136,30 @@ const TodoList = () => {
         </ScrollArea>
       </div>
 
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <Button
-            className="fixed bottom-10 right-[30rem] rounded-full w-14 h-14 shadow-lg bg-[#E53170] hover:bg-[#E53170]"
-            size="icon"
-          >
-            <Plus className="h-6 w-6" />
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Todo</DialogTitle>
-            <DialogDescription>
-              Create a new todo item for your list.
-            </DialogDescription>
-          </DialogHeader>
-          <AddTodo onSuccess={() => setIsOpen(false)} />
-        </DialogContent>
-      </Dialog>
+      <div className='flex items-center justify-between mt-10'>
+        <div></div>
+        <div>
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+              <Button
+                className="rounded-full w-14 h-14 shadow-lg bg-[#E53170] hover:bg-[#E53170]"
+                size="icon"
+              >
+                <Plus className="h-6 w-6" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add New Todo</DialogTitle>
+                <DialogDescription>
+                  Create a new todo item for your list.
+                </DialogDescription>
+              </DialogHeader>
+              <AddTodo onSuccess={() => setIsOpen(false)} />
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
     </div>
   )
 }

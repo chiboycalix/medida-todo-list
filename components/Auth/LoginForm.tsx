@@ -1,5 +1,5 @@
 
-import React, { useEffect, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import Link from 'next/link';
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
@@ -15,6 +15,7 @@ import Loader from '../Loader';
 import { useToast } from '../ToastContainer';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
+import { setCookie } from 'cookies-next';
 
 const Login: React.FC = () => {
   const [state, dispatch] = useReducer(loginReducer, initialLoginState);
@@ -22,14 +23,6 @@ const Login: React.FC = () => {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const { email, password, isCreatingTodo } = state;
-
-  useEffect(() => {
-    if (!user) {
-      router.push("/auth/login")
-    } else {
-      router.push("/")
-    }
-  }, [user, router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,8 +36,13 @@ const Login: React.FC = () => {
         addToast("Please enter your password", 'error');
         return;
       }
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
       addToast("Sign in was successful", 'success');
+      setCookie('authToken', await user.getIdToken(), {
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        path: '/',
+      });
       router.push("/")
       dispatch({ type: 'RESET_FORM' });
     } catch (error: any) {
