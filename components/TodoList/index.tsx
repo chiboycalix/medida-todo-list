@@ -19,6 +19,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Todo } from '@/types/Todo';
 import AddTodo from '../AddTodo';
 import TodoItem from '@/components/TodoItem';
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useRouter } from 'next/navigation';
+import { useToast } from '../ToastContainer';
 
 type FilterOption = 'all' | 'today' | 'week' | 'month';
 
@@ -27,6 +31,8 @@ const TodoList = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<FilterOption>('all');
   const { user, loading } = useAuth();
+  const router = useRouter();
+  const { addToast } = useToast();
 
   useEffect(() => {
     if (loading) return;
@@ -101,11 +107,21 @@ const TodoList = () => {
     return <div>Please log in to view your todos.</div>;
   }
 
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth)
+      router.push("/auth/login")
+      addToast("Sign out was successful", 'success');
+    } catch (error) {
+
+    }
+  }
 
   return (
     <div className='relative bg-white w-[40rem] mx-auto rounded-2xl p-8 pb-[7rem] border shadow-sm'>
-      <div className="w-full mb-4">
+      <div className="w-full mb-4 flex items-center justify-between">
         <h2 className="text-2xl font-black p-2">Todo List</h2>
+        <Button onClick={() => handleSignOut()} size="sm">Sign Out</Button>
       </div>
       <div className="mb-4 p-2">
         <Select value={filter} onValueChange={(value: FilterOption) => setFilter(value)}>
