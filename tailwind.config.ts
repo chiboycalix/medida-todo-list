@@ -1,6 +1,14 @@
 import type { Config } from "tailwindcss";
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 
 const config = {
+  reactStrictMode: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV !== "development",
+  },
+  swcMinify: true,
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -82,4 +90,4 @@ const config = {
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 
-export default config;
+export default withBundleAnalyzer(config);

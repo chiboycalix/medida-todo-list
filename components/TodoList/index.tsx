@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { Plus } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -11,15 +11,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { startOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, format, isWithinInterval, endOfDay } from 'date-fns';
-import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useAuth } from '@/contexts/AuthContext';
 import { Todo } from '@/types/Todo';
-import TodoItem from '@/components/TodoItem';
 import Loader from '@/components/Loader';
 import { useLogout } from '@/hooks/useLogout';
+
+const TodoItem = dynamic(() => import('@/components/TodoItem'), {
+  loading: () => <p>Loading...</p>,
+});
 
 const AddTodo = dynamic(() => import('@/components/AddTodo'))
 
@@ -42,9 +45,11 @@ const TodoList = () => {
     const q = query(
       collection(db, 'todos'),
       where('userId', '==', user.uid),
+      where('dueDate', '>=', startOfMonth(new Date())),
       orderBy('dueDate', 'asc'),
       orderBy('priority', 'desc'),
-      orderBy('createdAt', 'desc')
+      orderBy('createdAt', 'desc'),
+      limit(100)
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -92,8 +97,8 @@ const TodoList = () => {
     return grouped;
   };
 
-  const filteredTodos = filterTodos(todos, filter);
-  const groupedTodos = groupTodosByDay(filteredTodos);
+  const filteredTodos = useMemo(() => filterTodos(todos, filter), [todos, filter]);
+  const groupedTodos = useMemo(() => groupTodosByDay(filteredTodos), [filteredTodos]);
 
   if (loading) {
     return <div className='flex items-center justify-center h-screen'>

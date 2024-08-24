@@ -5,17 +5,19 @@ import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 
 import { auth } from '@/lib/firebase';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import OrDivider from '@/components/OrDivider';
 import { Label } from '@/components/ui/label';
 import GoogleIcon from "@/assets/Images/googleIcon.svg";
 import FacebookIcon from "@/assets/Images/facebookIcon.svg"
 import Image from 'next/image';
 import { initialLoginState, loginReducer } from '@/reducers/loginReducer';
-import Loader from '../Loader';
+import dynamic from 'next/dynamic'
 import { useToast } from '../ToastContainer';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
 import { setCookie } from 'cookies-next';
+
+const OrDivider = dynamic(() => import('@/components/OrDivider'), { ssr: false })
+const Loader = dynamic(() => import('@/components/Loader'), { ssr: false })
 
 const Login: React.FC = () => {
   const [state, dispatch] = useReducer(loginReducer, initialLoginState);
@@ -118,7 +120,14 @@ const Login: React.FC = () => {
       <div className='mt-12'><OrDivider /></div>
       <div>
         <Button onClick={handleGoogleSignIn} variant="outline" className="w-full mb-4 border-none bg-[#f2f8fa]" size="lg">
-          <Image src={GoogleIcon} alt='GoogleIcon' className='mr-2' loading="lazy" />
+          <Image
+            src={GoogleIcon}
+            alt='GoogleIcon'
+            width={20}
+            height={20}
+            className='mr-2'
+            loading="lazy"
+          />
           Sign in with Google
         </Button>
         <Button onClick={handleFacebookSignIn} variant="outline" className="w-full border-none bg-[#f2f8fa]" size="lg">
