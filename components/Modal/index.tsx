@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
+import { Button } from '../ui/button';
 
 interface ModalProps {
   isOpen: boolean;
@@ -50,13 +51,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
       >
         <div className="flex justify-between items-center mb-4">
           <h2 id="modal-title" className="text-xl font-bold">{title}</h2>
-          <button
+          <Button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
             aria-label="Close modal"
+            size="icon"
           >
             <X size={24} />
-          </button>
+          </Button>
         </div>
         <div>{children}</div>
       </div>

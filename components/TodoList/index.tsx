@@ -1,24 +1,18 @@
 "use client"
 import React, { useEffect, useMemo, useState } from 'react'
+import Loader from '@/components/Loader';
+import Modal from '@/components/Modal';
 import dynamic from 'next/dynamic'
-import { Plus } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { startOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, format, isWithinInterval, endOfDay } from 'date-fns';
-import { collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useAuth } from '@/contexts/AuthContext';
-import { Todo } from '@/types/Todo';
-import Loader from '@/components/Loader';
+import { Button } from "@/components/ui/button";
 import { useLogout } from '@/hooks/useLogout';
+import { Plus } from 'lucide-react';
+import { db } from '@/lib/firebase';
+import { Todo } from '@/types/Todo';
 
 const TodoItem = dynamic(() => import('@/components/TodoItem'), {
   loading: () => <p>Loading...</p>,
@@ -147,22 +141,17 @@ const TodoList = () => {
       <div className='flex items-center justify-between mt-10'>
         <div></div>
         <div>
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-              <Button
-                className="rounded-full w-14 h-14 shadow-lg bg-[#E53170] hover:bg-[#E53170]"
-                size="icon"
-              >
-                <Plus className="h-6 w-6" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Add Todo</DialogTitle>
-              </DialogHeader>
-              <AddTodo onSuccess={() => setIsOpen(false)} />
-            </DialogContent>
-          </Dialog>
+
+          <Modal isOpen={isOpen} onClose={() => setIsOpen(!isOpen)} title='Add Todo'>
+            <AddTodo onSuccess={() => setIsOpen(false)} />
+          </Modal>
+          <Button
+            className="rounded-full w-14 h-14 shadow-lg bg-[#E53170] hover:bg-[#E53170]"
+            size="icon"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <Plus className="h-6 w-6" />
+          </Button>
         </div>
       </div>
     </div>
