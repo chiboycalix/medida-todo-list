@@ -98,3 +98,15 @@ If you encounter any issues:
 1. Make sure all environment variables are correctly set.
 2. Check if you're using the correct Node.js version.
 3. Clear your browser cache or try in an incognito window.
+
+## Features
+1. Users can Register with their Email and Password
+2. Users can Register with their Google Account
+3. Users can Login with their Email and Password
+4. Users can Login with their Google Account
+5. Users can Create their Todos
+6. Users can View all Todos they created
+7. Users can update their Todos
+8. User can delete their Todos
+9. Users can view todos for Today, for the current week and for the current month
+10. Users can Logout of the Todo app
