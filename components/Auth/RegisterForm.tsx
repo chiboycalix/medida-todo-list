@@ -107,11 +107,11 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className='mx-auto'>
+    <div className='mx-auto lg:w-[80%] w-full'>
       <div className='mb-6'>
-        <h2 className='text-2xl mb-2'>Welcome back <span className="text-2xl animate-wave">👋</span></h2>
-        <p className='text-sm text-opacity-80 leading-6'>Today is a new day.It&apos;s your day. You shape it.
-          Sign in to start managing your projects.</p>
+        <h2 className='text-2xl mb-2'>Join us today <span className="text-2xl">🚀</span></h2>
+        <p className='text-sm text-opacity-80 leading-6'>Embark on a journey of productivity and success.
+        </p>
       </div>
       <form onSubmit={handleSignUp} className="space-y-4 w-full">
         <div className="flex flex-col">
@@ -174,6 +174,9 @@ const SignUp: React.FC = () => {
       </div>
       <p className="text-sm text-center w-full mt-4">
         Already have an account? <Link href="/auth/login" className="text-blue-500">Login here</Link>
+      </p>
+      <p className="text-center text-gray-600 text-sm uppercase mt-16">
+        © {new Date().getFullYear()} All rights reserved.
       </p>
     </div>
   );

@@ -12,7 +12,6 @@ import Image from 'next/image';
 import { initialLoginState, loginReducer } from '@/reducers/loginReducer';
 import dynamic from 'next/dynamic'
 import { useToast } from '../ToastContainer';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
 import { setCookie } from 'cookies-next';
 
@@ -22,7 +21,6 @@ const Loader = dynamic(() => import('@/components/Loader'), { ssr: false })
 const Login: React.FC = () => {
   const [state, dispatch] = useReducer(loginReducer, initialLoginState);
   const { addToast } = useToast();
-  const [user] = useAuthState(auth);
   const router = useRouter();
   const { email, password, isCreatingTodo } = state;
 
@@ -80,8 +78,8 @@ const Login: React.FC = () => {
   const handleFacebookSignIn = async () => { };
 
   return (
-    <div className='mx-auto'>
-      <div className='mb-6'>
+    <div className='mx-auto lg:w-[70%] w-full'>
+      <div className='mb-6 mt-8'>
         <h2 className='text-2xl mb-2'>Welcome back <span className="text-2xl animate-wave">👋</span>
         </h2>
         <p className='text-sm text-opacity-80 leading-6'>Today is a new day.It&apos;s your day. You shape it.
@@ -137,6 +135,9 @@ const Login: React.FC = () => {
       </div>
       <p className="text-sm text-center w-full mt-10">
         Don&apos;t you have an account? <Link href="/auth/register" className="text-blue-500">Sign Up</Link>
+      </p>
+      <p className="text-center text-gray-600 text-sm uppercase mt-24">
+        © {new Date().getFullYear()} All rights reserved.
       </p>
     </div>
   );
