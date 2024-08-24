@@ -101,8 +101,10 @@ const TodoList = () => {
 
   return (
     <div className='relative bg-white mx-auto rounded-2xl p-8 border shadow-sm lg:w-[40%] ipad:w-[60%] sm:w-[70%] w-[100%]'>
-      <div className="w-full mb-4 flex items-center justify-between">
-        <h2 className="text-2xl font-black p-2"><span className='text-green-500'>{user?.displayName}&apos;s</span> Todo List</h2>
+      <div className="w-full mb-4 flex flex-col lg:flex-row items-center justify-between">
+        <h2 className="text-2xl font-black p-2 text-center lg:text-left">
+          <span className='text-green-500'>{user?.displayName}&apos;s</span> Todo List
+        </h2>
         <Button onClick={logout} size="sm">Sign Out</Button>
       </div>
       <div className="mb-4 p-2">
