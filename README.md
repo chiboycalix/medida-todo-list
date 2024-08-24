@@ -38,7 +38,7 @@ Replace the placeholder values with your actual Firebase configuration after cre
 
 Also, create both a Realtime Database and a Firestore Database in your firebase console.
 
-The Realtime database will store the extra information (like `name` for our application), provided by a user while registering using the Email/Password Provider.
+The Realtime database will store the users with the extra information (like `name` for our application), provided while registering using the Email/Password Provider.
 
 Firestore Database will store the rest of the collections we create for our project
 
