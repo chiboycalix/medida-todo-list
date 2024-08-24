@@ -1,5 +1,7 @@
 "use client"
-import TodoList from "@/components/TodoList";
+import { lazy } from 'react';
+
+const TodoList = lazy(() => import('@/components/TodoList'))
 
 export default function Home() {
   return (

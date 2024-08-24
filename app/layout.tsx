@@ -3,7 +3,9 @@ import { ToastProvider } from '@/components/ToastContainer';
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from '@/contexts/AuthContext';
-
+import { Suspense } from 'react'
+import Loader from '@/components/Loader';
+import { PerformanceMonitor } from '@/components/PerformanceMonitor'
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -16,7 +18,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <ToastProvider>
-            {children}
+            <Suspense fallback={<Loader />}>
+              <PerformanceMonitor />
+              {children}
+            </Suspense>
           </ToastProvider>
         </AuthProvider>
       </body>

@@ -1,16 +1,18 @@
 "use client"
 import Image from 'next/image';
+import dynamic from 'next/dynamic'
 import React, { useState } from 'react';
 import EditIcon from "@/assets/Images/editIcon.png"
 import DeleteIcon from "@/assets/Images/deleteIcon.png"
-import UpdateTodo from '../UpdateTodo';
 import Modal from '../Modal';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Badge } from '../ui/badge';
 import { cn } from '@/lib/utils';
-import DeleteConfirmationModal from '../DeleteConfirmationModal';
 import { Todo } from '@/types/Todo';
+
+const UpdateTodo = dynamic(() => import('@/components/UpdateTodo'))
+const DeleteConfirmationModal = dynamic(() => import('@/components/DeleteConfirmationModal'))
 
 const TodoItem = ({ todo }: { todo: Todo }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,8 +35,8 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         </Badge>
       </div>
       <div className='flex items-center gap-4'>
-        <Image src={EditIcon} alt="EditIcon" className='w-6 cursor-pointer' onClick={() => setIsOpen(!isOpen)} />
-        <Image src={DeleteIcon} alt="DeleteIcon" className='w-6 cursor-pointer' onClick={() => setDeleteOpen(!deleteOpen)} />
+        <Image src={EditIcon} loading="lazy" alt="EditIcon" className='w-6 cursor-pointer' onClick={() => setIsOpen(!isOpen)} />
+        <Image src={DeleteIcon} loading="lazy" alt="DeleteIcon" className='w-6 cursor-pointer' onClick={() => setDeleteOpen(!deleteOpen)} />
       </div>
       <DeleteConfirmationModal
         isOpen={deleteOpen}

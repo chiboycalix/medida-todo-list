@@ -20,6 +20,7 @@ export default function AuthLayout({
           src={AuthBackgroundImage}
           alt="Authentication background"
           className='h-[98%] rounded-2xl'
+          loading="lazy"
         />
       </div>
     </div>

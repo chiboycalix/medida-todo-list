@@ -118,11 +118,11 @@ const Login: React.FC = () => {
       <div className='mt-12'><OrDivider /></div>
       <div>
         <Button onClick={handleGoogleSignIn} variant="outline" className="w-full mb-4 border-none bg-[#f2f8fa]" size="lg">
-          <Image src={GoogleIcon} alt='GoogleIcon' className='mr-2' />
+          <Image src={GoogleIcon} alt='GoogleIcon' className='mr-2' loading="lazy" />
           Sign in with Google
         </Button>
         <Button onClick={handleFacebookSignIn} variant="outline" className="w-full border-none bg-[#f2f8fa]" size="lg">
-          <Image src={FacebookIcon} alt='FacebookIcon' className='mr-2' />
+          <Image src={FacebookIcon} alt='FacebookIcon' className='mr-2' loading="lazy" />
           Sign in with Facebook
         </Button>
       </div>

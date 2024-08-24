@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { Plus } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
@@ -16,10 +17,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useAuth } from '@/contexts/AuthContext';
 import { Todo } from '@/types/Todo';
-import AddTodo from '../AddTodo';
 import TodoItem from '@/components/TodoItem';
-import Loader from '../Loader';
+import Loader from '@/components/Loader';
 import { useLogout } from '@/hooks/useLogout';
+
+const AddTodo = dynamic(() => import('@/components/AddTodo'))
 
 type FilterOption = 'all' | 'today' | 'week' | 'month';
 
@@ -123,15 +125,17 @@ const TodoList = () => {
 
       <div className='mt-5'>
         <ScrollArea className="h-[500px]" scrollHideDelay={0}>
-          {filteredTodos?.length === 0 && <div className='flex items-center justify-center'>No Todo(s) available</div>}
-          {Object.entries(groupedTodos).map(([day, dayTodos]) => (
-            <div key={day} className="rounded mb-0 p-2">
-              <h2 className="md:text-xl text-md font-bold mb-2 text-[#E53170]">{day}</h2>
-              {dayTodos.map((todo, idx) => (
-                <TodoItem key={idx} todo={todo} />
-              ))}
-            </div>
-          ))}
+          {filteredTodos?.length === 0 ?
+            <div className='flex items-center justify-center'>No Todo(s) available</div> :
+            Object.entries(groupedTodos).map(([day, dayTodos]) => (
+              <div key={day} className="rounded mb-0 p-2">
+                <h2 className="md:text-xl text-md font-bold mb-2 text-[#E53170]">{day}</h2>
+                {dayTodos.map((todo, idx) => (
+                  <TodoItem key={idx} todo={todo} />
+                ))}
+              </div>
+            ))
+          }
         </ScrollArea>
       </div>
 
