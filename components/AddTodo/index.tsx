@@ -1,5 +1,5 @@
 
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import Loader from "@/components/Loader";
 import { cn } from "@/lib/utils"
 import { Calendar as CalendarIcon } from "lucide-react"
@@ -14,11 +14,14 @@ import { format } from "date-fns"
 import { Label } from "@/components/ui/label";
 import { initialTodoState, todoReducer } from "@/reducers/todoReducer";
 import { useToast } from "@/components/ToastContainer";
+import { startOfDay } from 'date-fns'
 
 const AddTodo = ({ onSuccess }: { onSuccess: () => void }) => {
+  const [open, setOpen] = useState(false)
   const [state, dispatch] = useReducer(todoReducer, initialTodoState)
   const { title, dueDate, priority, isCreatingTodo } = state;
   const { addToast } = useToast();
+  const today = startOfDay(new Date());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,7 +80,7 @@ const AddTodo = ({ onSuccess }: { onSuccess: () => void }) => {
 
       <div className="flex flex-col">
         <Label htmlFor="dueDate" className='mb-2'>Select Due date</Label>
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant={"outline"}
@@ -95,8 +98,12 @@ const AddTodo = ({ onSuccess }: { onSuccess: () => void }) => {
             <Calendar
               mode="single"
               selected={dueDate}
-              onSelect={(value) => dispatch({ type: "SET_DUE_DATE", payload: value as any })}
+              onSelect={(value) => {
+                dispatch({ type: "SET_DUE_DATE", payload: value as any })
+                setOpen(false)
+              }}
               initialFocus
+              disabled={(date) => date < today}
               className="w-full"
             />
           </PopoverContent>

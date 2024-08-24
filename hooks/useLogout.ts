@@ -10,8 +10,8 @@ export const useLogout = () => {
   const logout = useCallback(async () => {
     try {
       await signOut(auth);
-      deleteCookie("authToken");
       router.push("/auth/login");
+      deleteCookie("authToken");
     } catch (error) {
       console.error("Error logging out:", error);
     }

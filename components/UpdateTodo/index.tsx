@@ -1,5 +1,5 @@
 
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import { doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import Loader from '../Loader';
 import { Label } from '../ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar as CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
+import { format, startOfDay } from "date-fns"
 import { cn } from '@/lib/utils';
 
 interface UpdateTodoProps {
@@ -20,6 +20,8 @@ interface UpdateTodoProps {
 }
 
 const UpdateTodo: React.FC<UpdateTodoProps> = ({ todo, onCancel }) => {
+  const today = startOfDay(new Date());
+  const [open, setOpen] = useState(false)
   const [state, dispatch] = useReducer(todoReducer, {
     title: todo.title,
     priority: todo.priority,
@@ -76,7 +78,7 @@ const UpdateTodo: React.FC<UpdateTodoProps> = ({ todo, onCancel }) => {
       </div>
       <div className="flex flex-col">
         <Label htmlFor="dueDate" className='mb-2'>Select Due date</Label>
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant={"outline"}
@@ -94,9 +96,13 @@ const UpdateTodo: React.FC<UpdateTodoProps> = ({ todo, onCancel }) => {
             <Calendar
               mode="single"
               selected={dueDate}
-              onSelect={(value) => dispatch({ type: "SET_DUE_DATE", payload: value as any })}
+              onSelect={(value) => {
+                dispatch({ type: "SET_DUE_DATE", payload: value as any })
+                setOpen(false)
+              }}
               initialFocus
               className="w-full"
+              disabled={(date) => date < today || date < dueDate}
             />
           </PopoverContent>
         </Popover>
