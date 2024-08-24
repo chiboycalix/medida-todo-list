@@ -2,17 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 import AuthBackgroundImage from "@/assets/Images/AuthBgImage.png";
 
-export function OptimizedImage() {
-  return (
-    <Image
-      src={AuthBackgroundImage}
-      alt="Authentication background Image"
-      className='h-[98%] rounded-2xl'
-      loading="lazy"
-    />
-  )
-}
-
 export default function AuthLayout({
   children,
 }: {
@@ -27,7 +16,12 @@ export default function AuthLayout({
         </p>
       </div>
       <div className="lg:w-1/2 w-full relative flex items-center p-4">
-        <OptimizedImage />
+        <Image
+          src={AuthBackgroundImage}
+          alt="Authentication background Image"
+          className='h-[98%] rounded-2xl'
+          loading="lazy"
+        />
       </div>
     </div>
   );
